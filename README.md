@@ -1,44 +1,38 @@
-This is an [Next.js](https://nextjs.org/) opinionated starter with ESLint, Prettier, Typescript, Jest, testing-libray already configured out of the box.
-All is configured to run in VS Code, with some goodies.
+## Description
 
-- absolute imports managed by VS Code, Next and Jest
-- lint which triggers Prettier formating
-- VS Code goodies :
-  - lint automatic at save
-  - exclusion of temporary directories (.next, node_modules, .history if you use this plugin)
-- Next :
-  - all code (except /public) is in src/ directory
-- useful scripts in package.json
-  - lint
-  - test
-  - check-all: run in sequence lint, TS compilation and tests
-  - fresh-install: remove temporary folders and reinstall packages
-- GitHub action:
-  - CI : to check lint, ts, tests and to run the build
-  - release : to make a new release after each commit beggining with feat: or fix: (see conventional commit)
-## Nota bene
+Imagine a better way to write API handlers in Next.js.
 
-All pages must end with a .page.tsx extension.
-All api must end with a .api.ts extension.
+Inspired by [Fresh](https://fresh.deno.dev/) for Deno.
 
-This enables to have other files in pages or api, which are note page or api endpoint, to be used as utilities or test and leverage colocation.
+See src/lib/api.ts.
 
 ## Usage
 
-For dev :
+```ts
+// /pages/api/hello.ts
+import type { NextApiRequest, NextApiResponse } from "next"
+import type { Handlers } from "../../lib/api"
+
+import { connectHandlers } from "../../lib/api"
+
+const handlers: Handlers = {
+  async GET(_, res: NextApiResponse) {
+    return res.status(200).json({ user: "Val Kilmer" })
+  },
+  async POST(req: NextApiRequest, res: NextApiResponse) {
+    const data = JSON.parse(req.body)
+
+    return res.status(200).json({ message: `Hello ${data.username}` })
+  },
+}
+
+export default connectHandlers(handlers)
 
 ```
-yarn create next-app --example https://github.com/pom421/next-ts-eslint-starter my-app
-cd my-app
+
+## Test it
+
+```sh
 yarn
 yarn dev
 ```
-
-For prod :
-
-```
-yarn build
-yarn start // yarn export for a static site only
-```
-
-
