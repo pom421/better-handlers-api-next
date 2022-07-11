@@ -7,7 +7,7 @@ type Handler = (req: NextApiRequest, res: NextApiResponse) => Promise<any>
 type Methods = typeof METHODS[number]
 
 export type Handlers = {
-  [Key in Methods]?: Handler
+  [Key in Methods as Lowercase<Key>]?: Handler
 }
 
 export type NextHandler = (req: NextApiRequest, res: NextApiResponse) => void
